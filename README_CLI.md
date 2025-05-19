@@ -18,8 +18,8 @@ This CLI lets you generate branded HOOK travel itineraries from sample data, exp
 ### 1. Clone or unzip this repository
 
 ```bash
-git clone https://github.com/YOUR_ORG/HOOK_Dev_Portal_GitRepo.git
-cd HOOK_Dev_Portal_GitRepo
+git clone https://github.com/TolaniCorp/HOOK_Travel.git
+cd HOOK_Travel
 ```
 
 ### 2. Run the CLI (first time)
