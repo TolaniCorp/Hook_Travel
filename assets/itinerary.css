@@ -1,0 +1,14 @@
+@page {
+  size: A4;
+  margin: 1in;
+}
+body {
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+}
+h1, h2 {
+  color: #0063ff;
+}
+ul {
+  line-height: 1.6;
+}
