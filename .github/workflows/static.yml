@@ -1,0 +1,143 @@
+# Save the comprehensive netlify.toml into the GitHub repo
+
+netlify_toml_content = """\
+# ======================
+# 🛠 General Build Settings
+# ======================
+
+[build]
+  publish = "public"
+  command = ""
+  functions = "netlify/functions"
+
+# ======================
+# 🌎 Environment Variables
+# ======================
+
+[context.production.environment]
+  NODE_ENV = "production"
+  OPENAI_API_KEY = "${OPENAI_API_KEY}"
+  SUPABASE_URL = "${SUPABASE_URL}"
+  SUPABASE_KEY = "${SUPABASE_KEY}"
+  HOOK_TOL_TOKEN_SECRET = "${HOOK_TOL_TOKEN_SECRET}"
+  EMAIL_SERVER_API = "${EMAIL_SERVER_API}"
+
+# ======================
+# 🌐 Redirects & Rewrites
+# ======================
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://api.hooktravel.com/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# ======================
+# 🔐 Security Headers
+# ======================
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+
+# ======================
+# 🧪 Staging Environment
+# ======================
+
+[context.staging.environment]
+  NODE_ENV = "staging"
+  SUPABASE_URL = "${STAGING_SUPABASE_URL}"
+  SUPABASE_KEY = "${STAGING_SUPABASE_KEY}"
+"""
+
+netlify_toml_path = Path("/mnt/data/HOOK_Dev_Portal_GitRepo/netlify.toml")
+netlify_toml_path.write_text(netlify_toml_content)
+
+# Repackage the updated repo
+final_zip_with_netlify = Path("/mnt/data/HOOK_Dev_Portal_GitRepo_With_Netlify.toml.zip")
+with zipfile.ZipFile(final_zip_with_netlify, "w") as zipf:
+    for file in Path("/mnt/data/HOOK_Dev_Portal_GitRepo").rglob("*"):
+        zipf.write(file, file.relative_to("/mnt/data/HOOK_Dev_Portal_GitRepo"))
+
+final_zip_with_netlify
+
+Analyzed
+python
+Always show details
+
+Copy
+# Recreate and package the HOOK GitHub repo with updated netlify.toml after state reset
+
+import os
+import zipfile
+from pathlib import Path
+
+# Recreate the folder structure
+repo_path = Path("/mnt/data/HOOK_Dev_Portal_GitRepo")
+assets_path = repo_path / "assets"
+assets_path.mkdir(parents=True, exist_ok=True)
+
+# Write placeholder files
+(repo_path / "index.html").write_text("<html><body><h1>HOOK Dev Portal</h1></body></html>")
+(repo_path / "README.md").write_text("# HOOK – Dev Portal\nRepository for HOOK Travel documentation and deployment.")
+assets_path.joinpath("HOOK_Data_Center_Architecture_Map.png").write_bytes(b"\x89PNG\r\n\x1a\n")
+
+# netlify.toml content (comprehensive)
+netlify_toml_content = """\
+[build]
+  publish = "public"
+  command = ""
+  functions = "netlify/functions"
+
+[context.production.environment]
+  NODE_ENV = "production"
+  OPENAI_API_KEY = "${OPENAI_API_KEY}"
+  SUPABASE_URL = "${SUPABASE_URL}"
+  SUPABASE_KEY = "${SUPABASE_KEY}"
+  HOOK_TOL_TOKEN_SECRET = "${HOOK_TOL_TOKEN_SECRET}"
+  EMAIL_SERVER_API = "${EMAIL_SERVER_API}"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://api.hooktravel.com/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+
+[context.staging.environment]
+  NODE_ENV = "staging"
+  SUPABASE_URL = "${STAGING_SUPABASE_URL}"
+  SUPABASE_KEY = "${STAGING_SUPABASE_KEY}"
+"""
+(repo_path / "netlify.toml").write_text(netlify_toml_content)
+
+# Zip the full project
+zip_path = Path("/mnt/data/HOOK_Dev_Portal_GitRepo_With_Netlify.toml.zip")
+with zipfile.ZipFile(zip_path, "w") as zipf:
+    for file in repo_path.rglob("*"):
+        zipf.write(file, file.relative_to(repo_path))
+
+zip_path
